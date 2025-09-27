@@ -19,10 +19,20 @@ func startRepl() {
 		if len(words) == 0 {
 			continue
 		}
+		word := words[0]
+		if command, ok := Commands[word]; ok {
+			if err := command.callback(); err != nil {
+				fmt.Println(err)
+			}
+		} else {
+			fmt.Println("Unknown command")
+			continue
+		}
 	}
 	if err := scanner.Err(); err != nil {
 		fmt.Println("read error:", err)
 	}
+
 }
 
 func cleanInput(text string) []string {
