@@ -24,8 +24,6 @@ const baseLocationAreaURL = "https://pokeapi.co/api/v2/location-area"
 
 var Commands map[string]cliCommand
 
-var cfg *config
-
 func registerCommands() {
 	Commands = map[string]cliCommand{
 		"exit": {name: "exit", description: "Exit the Pokedex", callback: commandExit},
@@ -33,6 +31,8 @@ func registerCommands() {
 		"map": {name: "map", description: "Displays the names of 20 location areas in the Pokemon world." +
 			"\n     Each subsequent call to map displays the next 20 locations",
 			callback: commandMap},
+		"mapb": {name: "mapb", description: "Displays the names of the last 20 location areas in the Pokemon world." +
+			"\n      Must use map at least twice to be able to go back", callback: commandMapb},
 	}
 }
 
@@ -57,6 +57,29 @@ func commandMap(c *config) error {
 		locArea, err = pokedex_api.GetLocations(baseLocationAreaURL)
 	} else {
 		locArea, err = pokedex_api.GetLocations(*c.next)
+	}
+	if err != nil {
+		log.Fatal("error: getting locations for commandMap", err)
+	}
+	c.next = locArea.Next
+	c.previous = locArea.Previous
+	locations := strings.Join(pokedex_api.Locations(locArea), "\n")
+	fmt.Println(locations)
+	return nil
+}
+
+func commandMapb(c *config) error {
+	var locArea pokedex_api.LocationArea
+	var err error
+	if c.next == nil && c.previous == nil {
+		fmt.Println("no pages have been listed")
+		return nil
+	}
+	if c.previous == nil {
+		fmt.Println("you're on the first page")
+		return nil
+	} else {
+		locArea, err = pokedex_api.GetLocations(*c.previous)
 	}
 	if err != nil {
 		log.Fatal("error: getting locations for commandMap", err)
