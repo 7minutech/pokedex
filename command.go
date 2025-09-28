@@ -17,6 +17,9 @@ func registerCommands() {
 	Commands = map[string]cliCommand{
 		"exit": {name: "exit", description: "Exit the Pokedex", callback: commandExit},
 		"help": {name: "help", description: "Displays a help message", callback: commandHelp},
+		"map": {name: "map", description: "Displays the names of 20 location areas in the Pokemon world." +
+			"\n     Each subsequent call to map displays the next 20 locations",
+			callback: commandMap},
 	}
 }
 
@@ -31,5 +34,10 @@ func commandHelp() error {
 	for _, cmd := range Commands {
 		fmt.Printf("%v: %v\n", cmd.name, cmd.description)
 	}
+	return nil
+}
+
+func commandMap() error {
+	fmt.Println("call to map")
 	return nil
 }
