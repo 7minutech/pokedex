@@ -22,7 +22,7 @@ type location struct {
 	URL  string `json:"url"`
 }
 
-var cache *pokecache.Cache = pokecache.NewCache(time.Second * 5)
+var cache = pokecache.NewCache(time.Second * 5)
 
 func GetLocations(url string) (locations LocationArea, err error) {
 	var locationArea LocationArea
