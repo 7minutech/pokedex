@@ -2,8 +2,12 @@ package pokedex_api
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
+	"io"
 	"net/http"
+	"time"
+
+	"github.com/7minutech/pokedex/internal/pokecache"
 )
 
 type LocationArea struct {
@@ -18,20 +22,35 @@ type location struct {
 	URL  string `json:"url"`
 }
 
+var cache *pokecache.Cache = pokecache.NewCache(time.Second * 5)
+
 func GetLocations(url string) (locations LocationArea, err error) {
+	var locationArea LocationArea
+	if value, found := cache.Get(url); found {
+		if err := json.Unmarshal(value, &locationArea); err != nil {
+			return LocationArea{}, fmt.Errorf("error ummarshaling cache data -> %w", err)
+		}
+		return locationArea, nil
+	}
 	resp, err := http.Get(url)
 	if err != nil {
-		log.Fatal("error: sending GET request", err)
+		return LocationArea{}, fmt.Errorf("error: sending GET request -> %w", err)
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode > 299 {
-		log.Fatalf("Response failed with status code: %d and\nbody: %s\n", resp.StatusCode, resp.Body)
+		b, _ := io.ReadAll(resp.Body)
+		return LocationArea{}, fmt.Errorf("error: status code: %d: %s", resp.StatusCode, string(b))
 	}
-	var locationArea LocationArea
-	if err := json.NewDecoder(resp.Body).Decode(&locationArea); err != nil {
-		log.Fatal("error: decoding respose json", err)
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return LocationArea{}, fmt.Errorf("error: reading response body -> %w", err)
+	}
+	cache.Add(url, data)
+	if err := json.Unmarshal(data, &locationArea); err != nil {
+		return LocationArea{}, fmt.Errorf("error: unmarshaling data -> %w", err)
 	}
 	return locationArea, nil
+
 }
 
 func Locations(locArea LocationArea) (locations []string) {
