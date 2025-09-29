@@ -1,0 +1,52 @@
+package pokecache
+
+import (
+	"sync"
+	"time"
+)
+
+type Cache struct {
+	entries  map[string]cacheEntry
+	mu       sync.Mutex
+	interval time.Duration
+}
+
+func (c *Cache) Add(key string, value []byte) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.entries[key] = cacheEntry{createdAt: time.Now(), val: value}
+}
+
+func (c *Cache) Get(key string) (value []byte, found bool) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if entry, isMapContainsKey := c.entries[key]; isMapContainsKey {
+		return entry.val, true
+	}
+	return nil, false
+}
+
+func (c *Cache) reapLoop() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	ticker := time.NewTicker(c.interval)
+	for range ticker.C {
+		for key, entry := range c.entries {
+			entryDuration := time.Since(entry.createdAt)
+			if entryDuration > c.interval {
+				delete(c.entries, key)
+			}
+		}
+	}
+}
+
+type cacheEntry struct {
+	createdAt time.Time
+	val       []byte
+}
+
+func NewCache(interval time.Duration) *Cache {
+	newCache := &Cache{interval: interval}
+	newCache.reapLoop()
+	return newCache
+}
