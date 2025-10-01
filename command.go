@@ -12,7 +12,7 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(cfg *config, arg string) error
 }
 
 type config struct {
@@ -33,16 +33,17 @@ func registerCommands() {
 			callback: commandMap},
 		"mapb": {name: "mapb", description: "Displays the names of the last 20 location areas in the Pokemon world." +
 			"\n      Must use map at least twice to be able to go back", callback: commandMapb},
+		"explore": {name: "explore <area_name>", description: "Displays a list of all the Pokémon located at <area_name>.", callback: commandExplore},
 	}
 }
 
-func commandExit(c *config) error {
+func commandExit(c *config, arg string) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
 }
 
-func commandHelp(c *config) error {
+func commandHelp(c *config, arg string) error {
 	fmt.Print("Welcome to the Pokedex!\nUsage:\n\n")
 	for _, cmd := range Commands {
 		fmt.Printf("%v: %v\n", cmd.name, cmd.description)
@@ -50,7 +51,7 @@ func commandHelp(c *config) error {
 	return nil
 }
 
-func commandMap(c *config) error {
+func commandMap(c *config, arg string) error {
 	var locAreaPage pokeapi.LocationAreaPage
 	var err error
 	if c.next == nil {
@@ -68,7 +69,7 @@ func commandMap(c *config) error {
 	return nil
 }
 
-func commandMapb(c *config) error {
+func commandMapb(c *config, arg string) error {
 	var locAreaPage pokeapi.LocationAreaPage
 	var err error
 	if c.next == nil && c.previous == nil {
@@ -88,5 +89,18 @@ func commandMapb(c *config) error {
 	c.previous = locAreaPage.Previous
 	locations := strings.Join(pokeapi.Locations(locAreaPage), "\n")
 	fmt.Println(locations)
+	return nil
+}
+
+func commandExplore(c *config, arg string) error {
+	encounters, err := pokeapi.GetEcounters(arg)
+	if err != nil {
+		fmt.Printf("couldn't find pokemon at %v\n", arg)
+		return nil
+	}
+	pokemons := pokeapi.GetPokemons(encounters)
+	pokemonNames := pokeapi.GetPokemonNames(pokemons)
+	fmt.Printf("exploring %v...\n", arg)
+	fmt.Println(strings.Join(pokemonNames, "\n"))
 	return nil
 }
