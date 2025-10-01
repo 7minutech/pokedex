@@ -1,6 +1,10 @@
 package main
 
+import (
+	"github.com/7minutech/pokedex/cmds"
+)
+
 func main() {
-	registerCommands()
+	cmds.RegisterCommands()
 	startRepl()
 }

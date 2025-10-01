@@ -1,7 +1,6 @@
 package pokecache
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -15,7 +14,6 @@ type Cache struct {
 func (c *Cache) Add(key string, value []byte) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	fmt.Println(c.entries)
 	c.entries[key] = cacheEntry{createdAt: time.Now(), val: value}
 }
 

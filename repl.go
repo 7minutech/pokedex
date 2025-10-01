@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/7minutech/pokedex/cmds"
 )
 
 func startRepl() {
 	scanner := bufio.NewScanner(os.Stdin)
-	var cfg config
+	var cfg cmds.Config
 	for {
 		fmt.Print("Pokedex > ")
 		if !scanner.Scan() {
@@ -25,8 +27,8 @@ func startRepl() {
 			arg = words[1]
 		}
 		word := words[0]
-		if command, ok := Commands[word]; ok {
-			if err := command.callback(&cfg, arg); err != nil {
+		if command, ok := cmds.Commands[word]; ok {
+			if err := command.Callback(&cfg, arg); err != nil {
 				fmt.Println(err)
 			}
 		} else {
