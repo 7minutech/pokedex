@@ -88,3 +88,16 @@ func IsCaptured(pokemon Pokemon) bool {
 	randNum := (rand.Float64() * 100) + 1
 	return randNum < (captureChance(pokemon) * 100)
 }
+
+func PokemonInfo(pokemon Pokemon) string {
+	info := fmt.Sprintf("Name: %v\nHeight: %v\nWeight: %v\n", pokemon.Name, pokemon.Height, pokemon.Weight)
+	info += "Stats:\n"
+	for _, stat := range pokemon.Stats {
+		info += fmt.Sprintf("  -%v: %v\n", stat.Stat.Name, stat.BaseStat)
+	}
+	info += "Types:\n"
+	for _, pokemonType := range pokemon.Types {
+		info += fmt.Sprintf("  - %v\n", pokemonType.Type.Name)
+	}
+	return info
+}
