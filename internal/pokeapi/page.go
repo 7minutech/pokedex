@@ -11,7 +11,7 @@ import (
 )
 
 type LocationAreaPage struct {
-	Count    int        `json:"count"`
+	// Next and Previous are *strings b/c they can be null
 	Next     *string    `json:"next"`
 	Previous *string    `json:"previous"`
 	Results  []location `json:"results"`
