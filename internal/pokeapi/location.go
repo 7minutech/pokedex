@@ -12,10 +12,10 @@ type LocationArea struct {
 }
 
 type Encounter struct {
-	Pokemon Pokemon `json:"pokemon"`
+	Pokemon PokemonEncounter `json:"pokemon"`
 }
 
-type Pokemon struct {
+type PokemonEncounter struct {
 	Name string `json:"name"`
 }
 
@@ -45,15 +45,15 @@ func GetEcounters(name string) ([]Encounter, error) {
 
 }
 
-func GetPokemons(encounters []Encounter) []Pokemon {
-	pokemons := make([]Pokemon, len(encounters))
+func GetPokemons(encounters []Encounter) []PokemonEncounter {
+	pokemons := make([]PokemonEncounter, len(encounters))
 	for i, encounter := range encounters {
 		pokemons[i] = encounter.Pokemon
 	}
 	return pokemons
 }
 
-func GetPokemonNames(pokemons []Pokemon) []string {
+func GetPokemonNames(pokemons []PokemonEncounter) []string {
 	pokemonNames := make([]string, len(pokemons))
 	for i, pokemon := range pokemons {
 		pokemonNames[i] = "- " + pokemon.Name

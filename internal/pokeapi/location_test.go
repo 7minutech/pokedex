@@ -12,17 +12,17 @@ func TestGetEcounters(t *testing.T) {
 		{
 			input: "canalave-city-area",
 			expected: []Encounter{
-				{Pokemon: Pokemon{Name: "tentacool"}},
-				{Pokemon: Pokemon{Name: "tentacruel"}},
-				{Pokemon: Pokemon{Name: "staryu"}},
-				{Pokemon: Pokemon{Name: "magikarp"}},
-				{Pokemon: Pokemon{Name: "gyarados"}},
-				{Pokemon: Pokemon{Name: "wingull"}},
-				{Pokemon: Pokemon{Name: "pelipper"}},
-				{Pokemon: Pokemon{Name: "shellos"}},
-				{Pokemon: Pokemon{Name: "gastrodon"}},
-				{Pokemon: Pokemon{Name: "finneon"}},
-				{Pokemon: Pokemon{Name: "lumineon"}},
+				{Pokemon: PokemonEncounter{Name: "tentacool"}},
+				{Pokemon: PokemonEncounter{Name: "tentacruel"}},
+				{Pokemon: PokemonEncounter{Name: "staryu"}},
+				{Pokemon: PokemonEncounter{Name: "magikarp"}},
+				{Pokemon: PokemonEncounter{Name: "gyarados"}},
+				{Pokemon: PokemonEncounter{Name: "wingull"}},
+				{Pokemon: PokemonEncounter{Name: "pelipper"}},
+				{Pokemon: PokemonEncounter{Name: "shellos"}},
+				{Pokemon: PokemonEncounter{Name: "gastrodon"}},
+				{Pokemon: PokemonEncounter{Name: "finneon"}},
+				{Pokemon: PokemonEncounter{Name: "lumineon"}},
 			},
 		},
 	}
@@ -46,14 +46,14 @@ func TestGetEcounters(t *testing.T) {
 func TestGetPokemons(t *testing.T) {
 	cases := []struct {
 		input    []Encounter
-		expected []Pokemon
+		expected []PokemonEncounter
 	}{
 		{
 			input: []Encounter{
-				{Pokemon: Pokemon{Name: "charmander"}},
-				{Pokemon: Pokemon{Name: "squirtle"}},
+				{Pokemon: PokemonEncounter{Name: "charmander"}},
+				{Pokemon: PokemonEncounter{Name: "squirtle"}},
 			},
-			expected: []Pokemon{{Name: "charmander"}, {Name: "squirtle"}},
+			expected: []PokemonEncounter{{Name: "charmander"}, {Name: "squirtle"}},
 		},
 	}
 
@@ -75,11 +75,11 @@ func TestGetPokemons(t *testing.T) {
 
 func TestGetPokemonNames(t *testing.T) {
 	cases := []struct {
-		input    []Pokemon
+		input    []PokemonEncounter
 		expected []string
 	}{
 		{
-			input: []Pokemon{
+			input: []PokemonEncounter{
 				{Name: "charmander"},
 				{Name: "squirtle"},
 			},

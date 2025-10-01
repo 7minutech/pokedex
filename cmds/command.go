@@ -23,5 +23,6 @@ func RegisterCommands() {
 		"mapb": {name: "mapb", description: "Displays the names of the last 20 location areas in the Pokemon world." +
 			"\n      Must use map at least twice to be able to go back", Callback: commandMapb},
 		"explore": {name: "explore <area_name>", description: "Displays a list of all the Pokémon located at <area_name>.", Callback: commandExplore},
+		"catch":   {name: "catch <pokemon_name>", description: "Displays a list of all the Pokémon located at <area_name>.", Callback: commandExplore},
 	}
 }
