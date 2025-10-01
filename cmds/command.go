@@ -1,5 +1,7 @@
 package cmds
 
+import "github.com/7minutech/pokedex/internal/pokeapi"
+
 type cliCommand struct {
 	name        string
 	description string
@@ -12,6 +14,7 @@ type Config struct {
 }
 
 var Commands map[string]cliCommand
+var Pokedex map[string]pokeapi.Pokemon
 
 func RegisterCommands() {
 	Commands = map[string]cliCommand{
@@ -23,6 +26,10 @@ func RegisterCommands() {
 		"mapb": {name: "mapb", description: "Displays the names of the last 20 location areas in the Pokemon world." +
 			"\n      Must use map at least twice to be able to go back", Callback: commandMapb},
 		"explore": {name: "explore <area_name>", description: "Displays a list of all the Pokémon located at <area_name>.", Callback: commandExplore},
-		"catch":   {name: "catch <pokemon_name>", description: "Displays a list of all the Pokémon located at <area_name>.", Callback: commandExplore},
+		"catch":   {name: "catch <pokemon_name>", description: "Attempt capture of <pokemon_name>", Callback: commandCatch},
 	}
+}
+
+func CreatePokedex() {
+	Pokedex = make(map[string]pokeapi.Pokemon)
 }
