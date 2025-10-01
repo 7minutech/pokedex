@@ -12,9 +12,9 @@ func commandCatch(c *Config, arg string) error {
 		fmt.Printf("couldn't find pokemon %v\n", arg)
 		return nil
 	}
-	fmt.Printf("Throwing a Pokeball at %v\n", arg)
+	fmt.Printf("Throwing a Pokeball at %v...\n", arg)
 	if pokeapi.IsCaptured(pokemon) {
-		fmt.Printf("%v was caught\n", arg)
+		fmt.Printf("%v was caught!\n", arg)
 		Pokedex[arg] = pokemon
 		return nil
 	}
