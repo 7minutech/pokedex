@@ -28,6 +28,7 @@ func RegisterCommands() {
 		"explore": {name: "explore <area_name>", description: "Displays a list of all the Pokémon located at <area_name>.", Callback: commandExplore},
 		"catch":   {name: "catch <pokemon_name>", description: "Attempt capture of <pokemon_name>", Callback: commandCatch},
 		"inspect": {name: "inspect <pokemon_name>", description: "Displays the name, height, weight, stats and type(s) of <pokemon_name> if caught", Callback: commandInspect},
+		"pokedex": {name: "pokdex", description: "Displays the captured pokemon in pokedex", Callback: commandPokedex},
 	}
 }
 

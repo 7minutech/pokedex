@@ -15,6 +15,7 @@ func commandCatch(c *Config, arg string) error {
 	fmt.Printf("Throwing a Pokeball at %v...\n", arg)
 	if pokeapi.IsCaptured(pokemon) {
 		fmt.Printf("%v was caught!\n", arg)
+		fmt.Println("You may now inspect it with the inspect command.")
 		Pokedex[arg] = pokemon
 		return nil
 	}
