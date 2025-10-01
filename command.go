@@ -51,7 +51,7 @@ func commandHelp(c *config) error {
 }
 
 func commandMap(c *config) error {
-	var locArea pokedex_api.LocationArea
+	var locArea pokedex_api.LocationAreaPage
 	var err error
 	if c.next == nil {
 		locArea, err = pokedex_api.GetLocations(baseLocationAreaURL)
@@ -69,7 +69,7 @@ func commandMap(c *config) error {
 }
 
 func commandMapb(c *config) error {
-	var locArea pokedex_api.LocationArea
+	var locArea pokedex_api.LocationAreaPage
 	var err error
 	if c.next == nil && c.previous == nil {
 		fmt.Println("no pages have been listed")
