@@ -3,6 +3,7 @@ package pokeapi
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 )
 
@@ -22,13 +23,24 @@ type Pokemon struct {
 func GetEcounters(name string) ([]Encounter, error) {
 	baseURL := "https://pokeapi.co/api/v2/location-area/"
 	fullURL := baseURL + name
+	var areaLoc AreaLocation
+	if value, found := cache.Get(fullURL); found {
+		if err := json.Unmarshal(value, &areaLoc); err != nil {
+			return nil, fmt.Errorf("error: unmarshaling encounters from cache -> %w", err)
+		}
+		return areaLoc.PokemonEncounters, nil
+	}
 	resp, err := http.Get(fullURL)
 	if err != nil {
-		return make([]Encounter, 0), fmt.Errorf("error: Get request to location area -> %w", err)
+		return nil, fmt.Errorf("error: Get request to location area -> %w", err)
 	}
-	var areaLoc AreaLocation
-	if err := json.NewDecoder(resp.Body).Decode(&areaLoc); err != nil {
-		return make([]Encounter, 0), fmt.Errorf("error: decoding response to pokemon -> %w", err)
+	data, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("error: reading response body -> %w", err)
+	}
+	cache.Add(fullURL, data)
+	if err := json.Unmarshal(data, &areaLoc); err != nil {
+		return nil, fmt.Errorf("error: unmarshaling encounter data -> %w", err)
 	}
 	return areaLoc.PokemonEncounters, nil
 
