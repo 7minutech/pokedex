@@ -20,9 +20,13 @@ func startRepl() {
 		if len(words) == 0 {
 			continue
 		}
+		arg := ""
+		if len(words) > 1 {
+			arg = words[1]
+		}
 		word := words[0]
 		if command, ok := Commands[word]; ok {
-			if err := command.callback(&cfg); err != nil {
+			if err := command.callback(&cfg, arg); err != nil {
 				fmt.Println(err)
 			}
 		} else {
