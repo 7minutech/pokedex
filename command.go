@@ -51,25 +51,25 @@ func commandHelp(c *config) error {
 }
 
 func commandMap(c *config) error {
-	var locArea pokeapi.LocationAreaPage
+	var locAreaPage pokeapi.LocationAreaPage
 	var err error
 	if c.next == nil {
-		locArea, err = pokeapi.GetLocations(baseLocationAreaURL)
+		locAreaPage, err = pokeapi.GetLocations(baseLocationAreaURL)
 	} else {
-		locArea, err = pokeapi.GetLocations(*c.next)
+		locAreaPage, err = pokeapi.GetLocations(*c.next)
 	}
 	if err != nil {
 		log.Fatal("error: getting locations for commandMap", err)
 	}
-	c.next = locArea.Next
-	c.previous = locArea.Previous
-	locations := strings.Join(pokeapi.Locations(locArea), "\n")
+	c.next = locAreaPage.Next
+	c.previous = locAreaPage.Previous
+	locations := strings.Join(pokeapi.Locations(locAreaPage), "\n")
 	fmt.Println(locations)
 	return nil
 }
 
 func commandMapb(c *config) error {
-	var locArea pokeapi.LocationAreaPage
+	var locAreaPage pokeapi.LocationAreaPage
 	var err error
 	if c.next == nil && c.previous == nil {
 		fmt.Println("no pages have been listed")
@@ -79,14 +79,14 @@ func commandMapb(c *config) error {
 		fmt.Println("you're on the first page")
 		return nil
 	} else {
-		locArea, err = pokeapi.GetLocations(*c.previous)
+		locAreaPage, err = pokeapi.GetLocations(*c.previous)
 	}
 	if err != nil {
 		log.Fatal("error: getting locations for commandMap", err)
 	}
-	c.next = locArea.Next
-	c.previous = locArea.Previous
-	locations := strings.Join(pokeapi.Locations(locArea), "\n")
+	c.next = locAreaPage.Next
+	c.previous = locAreaPage.Previous
+	locations := strings.Join(pokeapi.Locations(locAreaPage), "\n")
 	fmt.Println(locations)
 	return nil
 }
