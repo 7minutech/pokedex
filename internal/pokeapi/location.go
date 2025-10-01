@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-type AreaLocation struct {
+type LocationArea struct {
 	PokemonEncounters []Encounter `json:"pokemon_encounters"`
 }
 
@@ -22,12 +22,12 @@ type Pokemon struct {
 func GetEcounters(name string) ([]Encounter, error) {
 	baseURL := "https://pokeapi.co/api/v2/location-area/"
 	fullURL := baseURL + name
-	var areaLoc AreaLocation
+	var locArea LocationArea
 	if value, found := cache.Get(fullURL); found {
-		if err := json.Unmarshal(value, &areaLoc); err != nil {
+		if err := json.Unmarshal(value, &locArea); err != nil {
 			return nil, fmt.Errorf("error: unmarshaling encounters from cache -> %w", err)
 		}
-		return areaLoc.PokemonEncounters, nil
+		return locArea.PokemonEncounters, nil
 	}
 	resp, err := http.Get(fullURL)
 	if err != nil {
@@ -38,10 +38,10 @@ func GetEcounters(name string) ([]Encounter, error) {
 		return nil, fmt.Errorf("error: reading response body -> %w", err)
 	}
 	cache.Add(fullURL, data)
-	if err := json.Unmarshal(data, &areaLoc); err != nil {
+	if err := json.Unmarshal(data, &locArea); err != nil {
 		return nil, fmt.Errorf("error: unmarshaling encounter data -> %w", err)
 	}
-	return areaLoc.PokemonEncounters, nil
+	return locArea.PokemonEncounters, nil
 
 }
 
