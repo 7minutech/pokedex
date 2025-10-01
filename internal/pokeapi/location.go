@@ -8,7 +8,7 @@ import (
 )
 
 type AreaLocation struct {
-	PokemonEncounters []Encounter `json:"pokemon_counters"`
+	PokemonEncounters []Encounter `json:"pokemon_encounters"`
 }
 
 type Encounter struct {
@@ -17,7 +17,6 @@ type Encounter struct {
 
 type Pokemon struct {
 	Name string `json:"name"`
-	Url  string `json:"url"`
 }
 
 func GetEcounters(name string) ([]Encounter, error) {
@@ -57,7 +56,7 @@ func GetPokemons(encounters []Encounter) []Pokemon {
 func GetPokemonNames(pokemons []Pokemon) []string {
 	pokemonNames := make([]string, len(pokemons))
 	for i, pokemon := range pokemons {
-		pokemonNames[i] = pokemon.Name
+		pokemonNames[i] = "- " + pokemon.Name
 	}
 	return pokemonNames
 }
