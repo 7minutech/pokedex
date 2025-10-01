@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/7minutech/pokedex/internal/pokedex_api"
+	"github.com/7minutech/pokedex/internal/pokeapi"
 )
 
 type cliCommand struct {
@@ -51,25 +51,25 @@ func commandHelp(c *config) error {
 }
 
 func commandMap(c *config) error {
-	var locArea pokedex_api.LocationAreaPage
+	var locArea pokeapi.LocationAreaPage
 	var err error
 	if c.next == nil {
-		locArea, err = pokedex_api.GetLocations(baseLocationAreaURL)
+		locArea, err = pokeapi.GetLocations(baseLocationAreaURL)
 	} else {
-		locArea, err = pokedex_api.GetLocations(*c.next)
+		locArea, err = pokeapi.GetLocations(*c.next)
 	}
 	if err != nil {
 		log.Fatal("error: getting locations for commandMap", err)
 	}
 	c.next = locArea.Next
 	c.previous = locArea.Previous
-	locations := strings.Join(pokedex_api.Locations(locArea), "\n")
+	locations := strings.Join(pokeapi.Locations(locArea), "\n")
 	fmt.Println(locations)
 	return nil
 }
 
 func commandMapb(c *config) error {
-	var locArea pokedex_api.LocationAreaPage
+	var locArea pokeapi.LocationAreaPage
 	var err error
 	if c.next == nil && c.previous == nil {
 		fmt.Println("no pages have been listed")
@@ -79,14 +79,14 @@ func commandMapb(c *config) error {
 		fmt.Println("you're on the first page")
 		return nil
 	} else {
-		locArea, err = pokedex_api.GetLocations(*c.previous)
+		locArea, err = pokeapi.GetLocations(*c.previous)
 	}
 	if err != nil {
 		log.Fatal("error: getting locations for commandMap", err)
 	}
 	c.next = locArea.Next
 	c.previous = locArea.Previous
-	locations := strings.Join(pokedex_api.Locations(locArea), "\n")
+	locations := strings.Join(pokeapi.Locations(locArea), "\n")
 	fmt.Println(locations)
 	return nil
 }

@@ -1,4 +1,4 @@
-package pokedex_api
+package pokeapi
 
 import (
 	"encoding/json"
