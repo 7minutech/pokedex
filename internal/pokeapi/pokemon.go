@@ -37,6 +37,9 @@ type TypeDetail struct {
 const baseUrl = "https://pokeapi.co/api/v2/pokemon/"
 
 func GetPokemon(name string) (Pokemon, error) {
+	if name == "" {
+		return Pokemon{}, fmt.Errorf("error: no pokemon specified")
+	}
 	fullUrl := baseUrl + name
 	var pokemon Pokemon
 	if value, found := cache.Get(name); found {
